@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,19 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+/*
+* Snippet for a quick route reference
+*/
+Route::get('/', function (Router $router) {
+    return collect($router->getRoutes()->getRoutesByMethod()["GET"])->map(function($value, $key) {
+        return url($key);
+    })->values();   
 });
+
+Route::resource('businesses', 'BusinessAPIController', [
+    'only' => ['index', 'show', 'store', 'update', 'destroy']
+]);
+
+Route::resource('categories', 'CategoryAPIController', [
+    'only' => ['index', 'show', 'store', 'update', 'destroy']
+]);
